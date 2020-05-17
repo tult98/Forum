@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}Post a reply{% endblock %}
+
+
+{% block content %}
+
+<main id="tt-pageContent">
+    {% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">{{topic.thread.category.name}}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'thread_topics' topic.thread.pk  %}">{{topic.thread.name}}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'topic_posts' topic.thread.pk topic.pk  %}">{{topic.title | truncatechars_html:20}}</a></li>
+        <li class="breadcrumb-item activate" aria-current="page">Trả lời</li>
+      </ol>
+    </nav>
+  {% endblock %}
+
+  <form method="post" class="mb-4">
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Đăng trả lời</button>
+  </form>
+
+  <div class="tt-single-topic-list">
+  {% for post in topic.posts.all %}
+  <div class="tt-item">
+    <div class="tt-single-topic">
+       <div class="tt-item-header pt-noborder">
+           <div class="tt-item-info info-top">
+               <div class="tt-avatar-icon">
+                   <i class="tt-icon"><svg><use xlink:href="#icon-ava-{{post.created_by.username.0}}"></use></svg></i>
+               </div>
+               <div class="tt-avatar-title">
+                  <a href="#">{{post.created_by}}</a>
+               </div>
+               <a href="#" class="tt-info-time">
+                   <i class="tt-icon"><svg><use xlink:href="#icon-time"></use></svg></i>{{post.updated_at}}
+               </a>
+           </div>
+       </div>
+       <div class="tt-item-description">
+           {{post.content}}
+       </div>
+   </div>
+</div>
+  {% endfor %}
+  </div>
+</main>
+
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+
+{% load static %}
+
+{% block stylesheet %}
+{% endblock %}
+
+{% block body %}
+<main id="tt-pageContent" class="tt-offset-none">
+  <div class="container">
+      <div class="tt-loginpages-wrapper">
+          <div class="tt-loginpages">
+              <a href="{% url 'home' %}" class="tt-block-title">
+                  <img src="{% static 'images/logo.png' %}" alt="">
+                  <div class="tt-title">
+                      Chào mừng bạn đến Forum
+                  </div>
+                  <div class="tt-description">
+                      Tham gia ngay với chúng tôi để chia sẻ kiến thức công nghệ
+                  </div>
+              </a>
+              <form class="form-default" method="post" novalidate>
+                  {% csrf_token %}
+                  {% if form.errors %}
+                  <!-- Error messaging -->
+                  <div id="errors">
+                    <div class="inner">
+                      <p>There were some errors in the information you entered. Please correct the following:</p>
+                      <ul>
+                        {% for field in form %}
+                          {% if field.errors %}<li class="alert alert-danger" role="alert">{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  </div>
+                  <!-- /Error messaging -->
+                {% endif %}
+                  <div class="form-group">
+                      <label for="id_username">Tên đăng nhập</label>
+                      <input type="text" name="username" class="form-control" id="id_username">
+                  </div>
+                  <div class="form-group">
+                      <label for="id_email">Email</label>
+                      <input type="email" name="email" class="form-control" id="id_email">
+                  </div>
+                  <div class="form-group">
+                      <label for="id_password1">Mật khẩu</label>
+                      <input type="password" name="password1" class="form-control" id="id_password1">
+                  </div>
+                  <div class="form-group">
+                    <label for="id_password2">Xác thực mật khẩu</label>
+                    <input type="password" name="password2" class="form-control" id="id_password2">
+                  </div>
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-secondary btn-block">Đăng kí</button>
+                  </div>
+                  
+                  <p>Bạn đã có tài khoản? <a href="{% url 'login' %}" class="tt-underline">Đăng nhập</a></p>
+              </form>
+          </div>
+      </div>
+  </div>
+</main>
+{% endblock %}

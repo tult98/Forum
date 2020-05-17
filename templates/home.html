@@ -1,0 +1,89 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block content %}
+<style>
+.block-header {
+  border-radius: 5px;
+  background-color: lightblue;
+  height: 64px;
+  padding: 13px;
+}
+</style>
+<main id="tt-pageContent">
+      {% if messages %}
+        {% for message in messages %}
+          <div class="alert alert-{{message.tags}}" role="alert">
+              {{message}}
+          </div>
+        {% endfor %}
+      {% endif %}
+    <div class="tt-custom-mobile-indent container">
+        <div class="tt-categories-title">
+            <div class="tt-title">Danh mục</div>
+            <div class="tt-search">
+                <form class="search-wrapper" method="GET" action="">
+                    <div class="search-form">
+                        <input type="text" name="q" class="tt-search__input" placeholder="Tìm kiếm danh mục">
+                        <button class="tt-search__btn" type="submit">
+                           <svg class="tt-icon">
+                              <use xlink:href="#icon-search"></use>
+                            </svg>
+                        </button>
+                         <button class="tt-search__close">
+                           <svg class="tt-icon">
+                              <use xlink:href="#icon-cancel"></use>
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        {% for category in categories %}
+        <div class="block-header">
+            <p>{{ category.name }}</p>
+        </div>
+        <div class="tt-categories-list">
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div class="tt-item">
+                        {% for thread in category.get_list_thread %}
+                        <div class="tt-item-header row">
+                            <div class="col-md-6 col-lg-6">
+                                <img src="{%static 'images/chat.svg' %}" alt="" style="max-width: 50px;">
+                                <a href="{% url 'thread_topics' thread.pk %}">   {{ thread.name }}</a>
+                            </div>
+                            <div class="col-md-2 col-lg-2">
+                                <div class="row">
+                                    <p class="col-md-6 col-lg-6 text-center">Chủ đề</p>
+                                    <p class="col-md-6 col-lg-6 text-center">Bài viết</p>
+                                </div>
+                                <div class="row">
+                                    <p class="col-md-6 col-lg-6 text-center">{{ thread.get_topic_count }}</p>
+                                    <p class="col-md-6 col-lg-6 text-center">{{ thread.get_post_count }}</p>
+                                </div>
+                            </div>
+                            <div class="col-md-4 col-lg-4">  
+                                {% with topic=thread.get_last_topic %}
+                                <div class="row">
+                                    {% if topic %} 
+                                        <p class="col-md-12 col-lg-12 text-center">{{topic.title | truncatechars_html:30}}</p>
+                                        <p class="col-md-12 col-lg-12 text-center">By <i>{{ topic.starter }}</i> vào {{ topic.last_updated|naturaltime }}</p>
+                                        {% else %}
+                                        <p class="col-md-12 col-lg-12 text-center"><i>Chưa có bài đăng nào</i></p>
+                                    {% endif %}
+                                </div>
+                                {% endwith %}
+                            </div>
+                        </div>
+                        <hr>
+                        {% endfor %}
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+{% endblock %}

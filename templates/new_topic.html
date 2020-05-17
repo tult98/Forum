@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block title %}<title>Tạo bài đăng mới</title>{% endblock %}
+
+
+
+
+{% block content %}
+    <main id="tt-pageContent">
+        {% block breadcrumb %}
+        <nav aria-label="breadcrumb">
+          <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="home">{{thread.category.name}}</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'thread_topics' thread.pk %}">{{thread.name}}</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Đăng bài</li>
+          </ol>
+        </nav>
+        {% endblock %}
+
+        <form method="post" novalidate>
+          {% csrf_token %}
+        
+          {% include 'includes/form.html' %}
+        
+          <button type="submit" class="btn btn-success">Đăng bài</button>
+        </form>
+  </main>
+{% endblock %}

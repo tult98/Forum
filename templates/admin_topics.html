@@ -1,0 +1,148 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <table id="simple-table" class="table  table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>message</th>
+                    <th>Created by</th>
+                    <th>Check content</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for topic in topics %}
+                <tr>
+                    <td>
+                        {{topic.title | truncatechars_html:30}}
+                    </td>
+                    <td>{{topic.message | truncatechars_html:30}}</td>
+                    <td>{{topic.starter.username}}</td>
+                    <td style="text-align: center;">
+                        {% if topic.ischecked %}
+                        <i class="menu-icon fa  fa-check-square-o"></i>
+                        {% else %}
+                        <i class="menu-icon fa  fa-square-o"></i>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <div class="hidden-sm hidden-xs btn-group">
+                            <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#topicDetail{{topic.pk}}">
+                                <i class="ace-icon fa  fa-eye bigger-120"></i>
+                            </button>
+
+                            <a href="{% url 'update_topic' topic.pk %}" type="button" class="btn btn-xs btn-info">
+                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                            </a>
+
+                            <a href="{% url 'delete_topic' topic.pk %}" type="button" class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                            </a>
+                        </div>
+
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel">
+                                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                    <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                    <li>
+                                        <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                            <span class="blue">
+                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                            <span class="green">
+                                                <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                            <span class="red">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <div class="modal fade" id="topicDetail{{topic.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Topic Detail</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                          <form>
+                            <div class="form-group">
+                              <label for="recipient-name" class="col-form-label"><b>Title:</b></label>
+                              <br>
+                              <p>{{topic.title}}</p>
+                            </div>
+                            <div class="form-group">
+                              <label for="message-text" class="col-form-label"><b>Message:</b></label>
+                              <br>
+                              <p>{{topic.message}}</p>
+                            </div>
+                            <div class="form-group">
+                                <label for="message-text" class="col-form-label"><b>Người tạo:</b></label>
+                                <br>
+                                <p>{{topic.starter.username}}</p>
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label"><b>Views:</b></label>
+                                <br>
+                                <p>{{topic.views}}</p>
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label"><b>Thuộc chủ đề</b></label>
+                                <br>
+                                <p>{{topic.thread.name}}</p>
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label"><b>Check nội dung:</b></label>
+                                <br>
+                                {% if topic.ischecked %}
+                                <p>Đã kiểm tra nội dung</p>
+                                {% else %}
+                                <p>Chưa kiểm tra nội dung</p>
+                                {% endif %}
+                              </div>
+                              <div class="form-group">
+                                <label for="message-text" class="col-form-label"><b>Cập nhật lần cuối:</b></label>
+                                <br>
+                                <p>{{topic.last_updated}}</p>
+                              </div>
+                          </form>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+            </tbody>
+        </table>
+        <a class="btn btn-primary" type="button" href="{% url 'topic_create' %}">Create new topic</a>
+
+    </div><!-- /.span -->
+</div><!-- /.row -->
+
+{% endblock content %}

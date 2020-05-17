@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+
+{% block content %}
+
+<main id="tt-pageContent">
+    <div class="container">
+        <div class="tt-single-topic-list">
+            <div class="mb-4">
+                <a href="{% url 'reply_topic' topic.thread.pk topic.pk %}" class="btn btn-primary" role="button">Trả lời</a>
+              </div>
+            <div class="tt-item">
+                 <div class="tt-single-topic">
+                    <div class="tt-item-header">
+                        <div class="tt-item-info info-top">
+                            <div class="tt-avatar-icon">
+                                <i class="tt-icon"><svg><use xlink:href="#icon-ava-{{topic.starter.username.0}}"></use></svg></i>
+                            </div>
+                            <div class="tt-avatar-title">
+                               <p><i>{{topic.starter.username}}</i></p>
+                            </div>
+                            <a href="#" class="tt-info-time">
+                                <i class="tt-icon"><svg><use xlink:href="#icon-time"></use></svg></i>{{topic.last_updated}}
+                            </a>
+                        </div>
+                        <h3 class="tt-item-title">
+                            <p>{{topic.title}}</p>
+                        </h3>
+                    </div>
+                    <div class="tt-item-description">
+                        {{topic.get_message_as_markdown}}
+                    </div>
+                    <div class="tt-item-info info-bottom">
+                        <p class="tt-icon-btn">
+                            <i class="tt-icon"><svg><use xlink:href="#icon-view"></use></svg></i>
+                            <span class="tt-text">{{topic.views}}</span>
+                        </p>
+                        <p class="tt-icon-btn">
+                            <i class="tt-icon"><svg><use xlink:href="#icon-reply"></use></svg></i>
+                            <span class="tt-text">{{topic.get_post_count}}</span>
+                        </p>
+                        {% if topic.starter == user %}
+                        <div class="tt-icon-btn edit" style="float: right;">
+                          <a href="#" class="btn btn-primary btn-sm" role="button">Edit</a>
+                        </div>
+                      {% endif %}
+                    </div>
+                </div>
+            </div>
+            {% for post in topic.posts.all %}
+            <div class="tt-item">
+                <div class="tt-single-topic">
+                <div class="tt-item-header pt-noborder">
+                    <div class="tt-item-info info-top">
+                        <div class="tt-avatar-icon">
+                            <i class="tt-icon"><svg><use xlink:href="#icon-ava-{{post.created_by.username.0}}"></use></svg></i>
+                        </div>
+                        <div class="tt-avatar-title">
+                            <a href="#">{{post.created_by}}</a>
+                        </div>
+                        <a href="#" class="tt-info-time">
+                            <i class="tt-icon"><svg><use xlink:href="#icon-time"></use></svg></i>{{post.updated_at}}
+                        </a>
+                    </div>
+                </div>
+                <div class="tt-item-description">
+                    {{post.content}}
+                </div>
+            </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</main>
+
+{% endblock %}

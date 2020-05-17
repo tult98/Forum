@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% block title %}
+  <title>{{ thread.name }} | {{ thread.category.name }}</title>
+{% endblock %}
+
+{% block content %}
+<style>
+  .tt-col-value.hide-mobile {
+    text-align: center;
+}
+</style>
+
+<main id="tt-pageContent">
+  {% block breadcrumb %}
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}">{{thread.category.name}}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{thread.name}}</li>
+      </ol>
+    </nav>
+  {% endblock %}
+  <div class="tt-custom-mobile-indent container">
+    <div class="tt-categories-title">
+      <div class="mb-4 tt-title">
+        <a href="{% url 'new_topic' thread.pk %}" class="btn btn-primary">Đăng bài</a>
+      </div>
+      <div class="tt-search">
+        <form class="search-wrapper" method="GET" action="">
+            <div class="search-form">
+                <input type="text" name="q" class="tt-search__input" placeholder="Tìm kiếm bài đăng">
+                <button class="tt-search__btn" type="submit">
+                   <svg class="tt-icon">
+                      <use xlink:href="#icon-search"></use>
+                    </svg>
+                </button>
+                <button class="tt-search__close">
+                  <svg class="tt-icon">
+                    <use xlink:href="#icon-cancel"></use>
+                  </svg>
+              </button>
+            </div>
+        </form>
+    </div>
+  </div>
+  </div>
+  
+ 
+  {% if topics %}
+  <div class="tt-topic-list">
+    <div class="tt-list-header">
+      <div class="tt-col-topic">Bài đăng</div>
+      <div class="tt-col-category">Người tạo</div>
+      <div class="tt-col-value hide-mobile">Trả lời</div>
+      <div class="tt-col-value hide-mobile">Lượt xem</div>
+      <div class="tt-col-value">Cập nhật</div>
+    </div>
+    
+    {% for topic in topics %}
+      {% if topic.ischecked %}
+      {% url 'topic_posts' thread.pk topic.pk as topic_url %}
+      <div class="tt-item">
+        <div class="tt-col-avatar">
+            <svg class="tt-icon">
+              <use xlink:href="#icon-ava-{{topic.starter.username.0}}"></use>
+            </svg>
+        </div>
+        <div class="tt-col-description">
+          <h6 class="tt-title"><a href="{{ topic_url }}">
+                {{ topic.title | truncatechars_html:60 }}
+            </a></h6>
+            {% if topic.get_page_range > 1 %}
+            <small class="text-muted">
+              Trang:
+              {% for i in topic.get_page_range %}
+                <a href="{{ topic_url }}?page={{ i }}">{{ i }}</a>
+              {% endfor %}
+              {% if topic.has_many_pages %}
+              ... <a href="{{ topic_url }}?page={{ topic.get_page_count }}">Last Page</a>
+              {% endif %}
+            </small>
+            {% endif %}
+        </div>
+        <div class="tt-col-category"><span class="tt-color0{{topic.pk}} tt-badge">{{ topic.starter.username }}</span></div>
+        <div class="tt-col-value hide-mobile">{{ topic.replies }}</div>
+        <div class="tt-col-value tt-color-select  hide-mobile">{{ topic.views }}</div>
+        <div class="tt-col-value hide-mobile">{{ topic.last_updated|naturaltime }}</div>
+      </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+  {% else %}
+    <h1 style="text-align: center;">Hiện chưa có bài đăng nào!!!</h1>
+  {% endif %}
+</main>
+
+<!-- {% include 'includes/pagination.html' %} -->
+
+{% endblock %}

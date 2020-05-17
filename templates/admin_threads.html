@@ -1,0 +1,114 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-xs-12">
+        <table id="simple-table" class="table  table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Description</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for thread in threads %}
+                <tr>  
+                    <td>
+                        {{thread.name | truncatechars_html:30}}
+                    </td>
+                    <td>{{thread.description}}</td>
+                   
+                    <td>
+                        <div class="hidden-sm hidden-xs btn-group">
+                            <button class="btn btn-xs btn-success" data-toggle="modal" data-target="#threadDetail{{thread.pk}}">
+                                <i class="ace-icon fa  fa-eye bigger-120"></i>
+                            </button>
+
+                            <a href="{% url 'update_thread' thread.pk %}" class="btn btn-xs btn-info">
+                                <i class="ace-icon fa fa-pencil bigger-120"></i>
+                            </a>
+
+                            <a href="{% url 'delete_thread' thread.pk %}" type="button" class="btn btn-xs btn-danger">
+                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                            </a>
+                        </div>
+
+                        <div class="hidden-md hidden-lg">
+                            <div class="inline pos-rel">
+                                <button class="btn btn-minier btn-primary dropdown-toggle" data-toggle="dropdown" data-position="auto">
+                                    <i class="ace-icon fa fa-cog icon-only bigger-110"></i>
+                                </button>
+
+                                <ul class="dropdown-menu dropdown-only-icon dropdown-yellow dropdown-menu-right dropdown-caret dropdown-close">
+                                    <li>
+                                        <a href="#" class="tooltip-info" data-rel="tooltip" title="View">
+                                            <span class="blue">
+                                                <i class="ace-icon fa fa-search-plus bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="tooltip-success" data-rel="tooltip" title="Edit">
+                                            <span class="green">
+                                                <i class="ace-icon fa fa-pencil-square-o bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+
+                                    <li>
+                                        <a href="#" class="tooltip-error" data-rel="tooltip" title="Delete">
+                                            <span class="red">
+                                                <i class="ace-icon fa fa-trash-o bigger-120"></i>
+                                            </span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+
+                <div class="modal fade" id="threadDetail{{thread.pk}}" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                      <div class="modal-content">
+                        <div class="modal-header">
+                          <h5 class="modal-title" id="exampleModalLabel">Thread Detail</h5>
+                          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                          </button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                              <label for="recipient-name" class="col-form-label"><b>Name:</b></label>
+                              <br>
+                              <p>{{thread.name}}</p>
+                            </div>
+                            <div class="form-group">
+                              <label for="message-text" class="col-form-label"><b>Description:</b></label>
+                              <br>
+                              <p>{{thread.description}}</p>
+                            </div>
+                            <div class="form-group">
+                            <label for="message-text" class="col-form-label"><b>Thuộc danh mục:</b></label>
+                            <br>
+                            <p>{{thread.category}}</p>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+                
+            </tbody>
+        </table>
+        <a class="btn btn-primary" type="button" href="{% url 'thread_create' %}">Create new thread</a>
+
+    </div><!-- /.span -->
+</div><!-- /.row -->
+
+{% endblock content %}
