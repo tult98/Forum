@@ -26,7 +26,7 @@ SECRET_KEY = '+yo#$vxd(8tae%e)op=(2%=!wy%vkcb&x=v)5143*6x(9ojpb$'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['my-forumm-app.herokuapp.com']
 
 
 # Application definition
